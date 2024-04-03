@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+
+# MySQL Container
+  mysql:
+    image: mysql:8.0
+    container_name: laravel-mysql-container
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_USERNAME: 'root'
+      MYSQL_DATABASE: 'test_staging'
+      MYSQL_ROOT_PASSWORD: 'test_staging_password'
+    tty: true 
+    restart: unless-stopped
+
+# Backend Service
+  test-backend:
+    image: test-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: test-backend
+    depends_on:
+      - mysql
+    tty: true
+    ports:
+      - "8000:8000"
+
+  # To connect with database 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-test-resturant-container
+    environment:
+      PMA_ARBITRARY: 1
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    ports:
+      - 81:80
+# To make chnages live comment volume section for first time while running docker compose up then again down it and
+# up it after removing volumes section from comments 
+    # volumes:
+    #   - ./:/var/www/
+
+volumes:
+  mysql-data:
