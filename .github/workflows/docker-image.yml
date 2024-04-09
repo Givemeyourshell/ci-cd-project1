@@ -16,11 +16,14 @@ jobs:
         
 
       - name: Log into Docker Hub
-        uses: docker/login-action@
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
 
       - name: Build and push Docker image
-        run: docker build -t cicd-deploy:latest .
+        run: docker build -t givemeyourshell/cicd-deploy:latest .
+
+      - name: Push Docker image to Docker Hub
+        run: docker push givemeyourshell/cicd-deploy:latest
