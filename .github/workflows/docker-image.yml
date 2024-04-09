@@ -47,6 +47,7 @@ jobs:
         run: sudo docker run -d -p 8000:8000 givemeyourshell/cicd-deploy:latest
 
   testing_deployment:
+    needs: continous_deployment
     runs-on: ubuntu-latest
     steps:
       - name: Check application response code
