@@ -6,13 +6,13 @@ on:
  
 
 jobs:
-  push_to_registry:
+  continous_integration:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
 
       - name: Log into Docker Hub
@@ -27,3 +27,20 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: docker push givemeyourshell/cicd-deploy:latest
+  continous_deployment:
+    environment: 
+      name: Where are running 
+      url: http://ec2-3-80-28-126.compute-1.amazonaws.com:8000/
+    runs-on: self-hosted
+    steps:
+      - name: Log into Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Pull Docker image to AWS
+        run: docker pull givemeyourshell/cicd-deploy:latest
+
+      - name : Run Docker container
+        run: docker run -d -p 8000:8000 givemeyourshell/cicd-deploy:latest
