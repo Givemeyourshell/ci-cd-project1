@@ -23,5 +23,4 @@ jobs:
 
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@
         run: docker build -t cicd-deploy:latest .
