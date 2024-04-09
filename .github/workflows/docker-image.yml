@@ -41,7 +41,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Destroy existing Docker container
-        run: sudo docker stop $(sudo docker ps -q --filter ancestor=givemeyourshell/cicd-deploy:latest)
+        run: sudo docker stop cicdapp
+
+      - name: DRemove existing Docker container
+        run: sudo docker rm cicdapp  
 
       - name: Delete existing Docker image
         run: sudo docker rmi givemeyourshell/cicd-deploy:latest 
@@ -50,7 +53,7 @@ jobs:
         run: sudo docker pull givemeyourshell/cicd-deploy:latest
 
       - name : Run Docker container
-        run: sudo docker run -d -p 8000:8000 givemeyourshell/cicd-deploy:latest
+        run: sudo docker run --name cicdapp -d -p 8000:8000 givemeyourshell/cicd-deploy:latest
 
   testing_deployment:
     needs: continous_deployment
