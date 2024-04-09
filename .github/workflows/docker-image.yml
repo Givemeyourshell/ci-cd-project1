@@ -28,6 +28,7 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: docker push givemeyourshell/cicd-deploy:latest
   continous_deployment:
+    needs: continous_integration
     environment: 
       name: Where are running 
       url: http://ec2-3-80-28-126.compute-1.amazonaws.com:8000/
