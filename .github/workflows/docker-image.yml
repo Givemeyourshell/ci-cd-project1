@@ -40,7 +40,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Pull Docker image to AWS
-        run: docker pull givemeyourshell/cicd-deploy:latest
+        run: sudo docker pull givemeyourshell/cicd-deploy:latest
 
       - name : Run Docker container
-        run: docker run -d -p 8000:8000 givemeyourshell/cicd-deploy:latest
+        run: sudo docker run -d -p 8000:8000 givemeyourshell/cicd-deploy:latest
