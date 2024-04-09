@@ -40,6 +40,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Destroy existing Docker container
+        run: sudo docker stop $(sudo docker ps -q --filter ancestor=givemeyourshell/cicd-deploy:latest)
+
+      - name: Delete existing Docker image
+        run: sudo docker rmi givemeyourshell/cicd-deploy:latest 
+
       - name: Pull Docker image to AWS
         run: sudo docker pull givemeyourshell/cicd-deploy:latest
 
