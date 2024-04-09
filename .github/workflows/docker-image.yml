@@ -45,3 +45,21 @@ jobs:
 
       - name : Run Docker container
         run: sudo docker run -d -p 8000:8000 givemeyourshell/cicd-deploy:latest
+
+  testing_deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check application response code
+        if: github.event.workflow_run.conclusion == 'success'
+        run: |
+          response_code=$(curl -s -o /dev/null -w "%{http_code}" http://http://ec2-3-80-28-126.compute-1.amazonaws.com:8000/)
+          if [ $response_code -eq 500 ]; then
+            echo "Application responded with HTTP 500 OK"
+          else
+            echo "Application responded with HTTP $response_code"
+            exit 1
+          fi
+      
+      - name: Check CD pipeline failure
+        if: github.event.workflow_run.conclusion != 'success'
+        run: echo "CD pipeline failed"
